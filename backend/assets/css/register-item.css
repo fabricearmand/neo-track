@@ -1,0 +1,92 @@
+/* Register Item Styles - NeoTrack */
+
+.register-item-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.register-item-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+.register-item-header {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.register-item-header i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.register-item-form {
+    padding: 30px;
+}
+
+.qr-preview {
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+}
+
+.qr-code {
+    width: 150px;
+    height: 150px;
+    background: #f8f9fa;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: #ff6b35;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-generate {
+    background: #28a745;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.btn-generate:hover {
+    background: #218838;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .register-item-container {
+        padding: 10px;
+    }
+
+    .register-item-card {
+        max-width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}

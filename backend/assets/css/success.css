@@ -1,0 +1,162 @@
+/* Success Styles - NeoTrack */
+
+.success-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.success-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.success-header {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 40px 30px;
+}
+
+.success-header i {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.success-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+}
+
+.success-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+.success-content {
+    padding: 40px 30px;
+}
+
+.success-message {
+    margin-bottom: 30px;
+}
+
+.success-message h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.success-message p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.qr-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.qr-summary h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.qr-summary p {
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.qr-summary .qr-code-id {
+    font-family: monospace;
+    background: #ff6b35;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.success-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: #ff6b35;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-primary:hover {
+    background: #e55a2b;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.success-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .success-container {
+        padding: 10px;
+    }
+
+    .success-card {
+        max-width: 100%;
+    }
+
+    .success-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .success-header h1 {
+        font-size: 2rem;
+    }
+}

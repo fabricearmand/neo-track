@@ -1,0 +1,174 @@
+/* Public Item Styles - NeoTrack */
+
+.public-item-container {
+    min-height: 100vh;
+    background: #f8f9fa;
+    padding: 20px;
+}
+
+.public-item-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.public-item-header {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.public-item-header i {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.item-info {
+    padding: 30px;
+}
+
+.item-details {
+    margin-bottom: 30px;
+}
+
+.item-details h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.item-description {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.item-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.meta-icon {
+    color: #ff6b35;
+    font-size: 1.2rem;
+    width: 20px;
+}
+
+.meta-label {
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;
+}
+
+.meta-value {
+    color: #666;
+}
+
+.qr-section {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.qr-code {
+    width: 200px;
+    height: 200px;
+    background: white;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    color: #333;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
+
+.qr-info {
+    margin-bottom: 20px;
+}
+
+.qr-info h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.qr-info p {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.contact-section {
+    background: #fff8f5;
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 4px solid #ff6b35;
+}
+
+.contact-section h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.contact-icon {
+    color: #ff6b35;
+    font-size: 1.2rem;
+}
+
+.contact-btn {
+    background: #ff6b35;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-btn:hover {
+    background: #e55a2b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .public-item-container {
+        padding: 10px;
+    }
+
+    .item-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .qr-code {
+        width: 150px;
+        height: 150px;
+        font-size: 4rem;
+    }
+}
