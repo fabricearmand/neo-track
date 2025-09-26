@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - NeoTrack</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Success!</h1>
+            <p>Your QR code has been generated successfully!</p>
+            <p>Your item is now protected with NeoTrack.</p>
+
+            <!-- QR Code Display -->
+            <div class="qr-code-display">
+                <h3>Your QR Code</h3>
+                <div class="qr-code-container">
+                    <img id="qrCodeImage" src="" alt="Generated QR Code" />
+                    <div class="qr-code-info">
+                        <p><strong>Item:</strong> <span id="itemName"></span></p>
+                        <p><strong>QR Code ID:</strong> <span id="qrCodeId"></span></p>
+                        <p><strong>Owner:</strong> <span id="ownerName"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qr-actions">
+                <button onclick="downloadQRCode()" class="btn-primary">
+                    <i class="fas fa-download"></i> Download QR Code
+                </button>
+                <button onclick="printQRCode()" class="btn-secondary">
+                    <i class="fas fa-print"></i> Print QR Code
+                </button>
+            </div>
+
+            <div class="success-actions">
+                <a href="/dashboard" class="btn-primary">
+                    <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                </a>
+                <a href="/" class="btn-secondary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get QR code data from sessionStorage
+        const qrCodeData = JSON.parse(sessionStorage.getItem('qrCodeData'));
+
+        if (qrCodeData) {
+            // Display QR code
+            document.getElementById('qrCodeImage').src = qrCodeData.qr_code_data_url;
+            document.getElementById('itemName').textContent = qrCodeData.item_name || 'N/A';
+            document.getElementById('qrCodeId').textContent = qrCodeData.qr_code_id || 'N/A';
+            document.getElementById('ownerName').textContent = qrCodeData.owner_name || 'N/A';
+
+            // Store for later use
+            localStorage.setItem('lastQRCode', JSON.stringify(qrCodeData));
+        } else {
+            // No QR code data found, redirect to dashboard
+            console.log('No QR code data found, redirecting to dashboard');
+            window.location.href = '/dashboard';
+        }
+
+        function downloadQRCode() {
+            if (!qrCodeData) return;
+
+            const link = document.createElement('a');
+            link.download = `neotrack-qr-${qrCodeData.qr_code_id}.png`;
+            link.href = qrCodeData.qr_code_data_url;
+            link.click();
+        }
+
+        function printQRCode() {
+            if (!qrCodeData) return;
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Print QR Code - NeoTrack</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            text-align: center;
+                            padding: 20px;
+                        }
+                        .qr-container {
+                            border: 2px solid #ff6b35;
+                            padding: 20px;
+                            display: inline-block;
+                            margin: 20px auto;
+                        }
+                        .qr-info {
+                            margin-top: 20px;
+                        }
+                        .qr-info p {
+                            margin: 5px 0;
+                        }
+                        .instructions {
+                            margin-top: 30px;
+                            font-size: 14px;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>NeoTrack QR Code</h1>
+                    <div class="qr-container">
+                        <img src="${qrCodeData.qr_code_data_url}" style="width: 300px; height: 300px;" />
+                        <div class="qr-info">
+                            <p><strong>Item:</strong> ${qrCodeData.item_name}</p>
+                            <p><strong>QR Code ID:</strong> ${qrCodeData.qr_code_id}</p>
+                            <p><strong>Owner:</strong> ${qrCodeData.owner_name}</p>
+                        </div>
+                    </div>
+                    <div class="instructions">
+                        <p><strong>Instructions:</strong></p>
+                        <p>1. Print this page</p>
+                        <p>2. Cut out the QR code</p>
+                        <p>3. Attach it to your item</p>
+                        <p>4. When scanned, it will show your contact information</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+
+    <style>
+        .success-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+
+        .success-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .success-icon {
+            margin-bottom: 30px;
+        }
+
+        .success-icon i {
+            font-size: 80px;
+            color: #28a745;
+        }
+
+        .success-card h1 {
+            color: #ff6b35;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .success-card p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .qr-code-display {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid #ff6b35;
+        }
+
+        .qr-code-display h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .qr-code-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .qr-code-container img {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            padding: 10px;
+        }
+
+        .qr-code-info {
+            text-align: left;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .qr-code-info p {
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .qr-code-info strong {
+            color: #ff6b35;
+            display: inline-block;
+            width: 80px;
+        }
+
+        .qr-actions {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        .qr-actions .btn-primary,
+        .qr-actions .btn-secondary {
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .qr-actions .btn-primary {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .qr-actions .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .success-actions .btn-primary,
+        .success-actions .btn-secondary {
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-actions .btn-primary {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .success-actions .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .qr-actions,
+            .success-actions {
+                flex-direction: column;
+            }
+
+            .qr-code-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</body>
+</html>
