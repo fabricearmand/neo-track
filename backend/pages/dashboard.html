@@ -50,9 +50,6 @@
         <header class="dashboard-header">
             <h1>Dashboard</h1>
             <div class="header-actions">
-                <button onclick="showQRManagement()" class="btn-primary">
-                    <i class="fas fa-plus"></i> Add QR Code
-                </button>
                 <button onclick="showNotifications()" class="btn-secondary">
                     <i class="fas fa-bell"></i> Notifications
                 </button>
@@ -61,6 +58,13 @@
 
         <!-- Overview Section -->
         <section id="overview" class="dashboard-section active">
+            <div class="section-header">
+                <h2>Overview</h2>
+                <button onclick="window.location.href='/buy-qr'" class="btn-primary">
+                    <i class="fas fa-plus"></i> Register Item
+                </button>
+            </div>
+
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon">

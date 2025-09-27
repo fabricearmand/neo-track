@@ -304,12 +304,14 @@ body {
 
 .function-card h3 {
     margin-bottom: 0.5rem;
-    color: #fff;
+    color: #fff !important;
+    font-weight: bold;
 }
 
 .function-card p {
     font-size: 0.9rem;
-    opacity: 0.8;
+    color: #fff;
+    opacity: 1;
 }
 
 .hero-image {
