@@ -9,28 +9,28 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" role="navigation" aria-label="Main navigation">
         <div class="sidebar-header">
             <i class="fas fa-qrcode"></i>
             <span>NeoTrack</span>
         </div>
         <nav class="sidebar-nav">
-            <a href="#overview" class="nav-item active">
+            <a href="#overview" class="nav-item active" aria-label="Go to Overview section">
                 <i class="fas fa-tachometer-alt"></i> Overview
             </a>
-            <a href="#qr-codes" class="nav-item">
+            <a href="#qr-codes" class="nav-item" aria-label="Go to My QR Codes section">
                 <i class="fas fa-qrcode"></i> My QR Codes
             </a>
-            <a href="#notifications" class="nav-item">
-                <i class="fas fa-bell"></i> Notifications <span id="notifBadge" class="badge">0</span>
+            <a href="#notifications" class="nav-item" aria-label="Go to Notifications section">
+                <i class="fas fa-bell"></i> Notifications <span id="notifBadge" class="badge" aria-label="Notification count">0</span>
             </a>
-            <a href="#settings" class="nav-item">
+            <a href="#settings" class="nav-item" aria-label="Go to Settings section">
                 <i class="fas fa-cog"></i> Settings
             </a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-info">
-                <div class="user-avatar">
+                <div class="user-avatar" aria-label="User avatar">
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="user-details">
@@ -38,7 +38,7 @@
                     <div id="userEmail" class="user-email">user@example.com</div>
                 </div>
             </div>
-            <button onclick="logout()" class="logout-btn">
+            <button onclick="logout()" class="logout-btn" aria-label="Log out from account">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
         </div>
@@ -47,20 +47,20 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <header class="dashboard-header">
+        <header class="dashboard-header" role="banner">
             <h1>Dashboard</h1>
             <div class="header-actions">
-                <button onclick="showNotifications()" class="btn-secondary">
+                <button onclick="showNotifications()" class="btn-secondary" aria-label="Show notifications">
                     <i class="fas fa-bell"></i> Notifications
                 </button>
             </div>
         </header>
 
         <!-- Overview Section -->
-        <section id="overview" class="dashboard-section active">
+        <section id="overview" class="dashboard-section active" aria-label="Dashboard overview">
             <div class="section-header">
                 <h2>Overview</h2>
-                <button onclick="window.location.href='/buy-qr'" class="btn-primary">
+                <button onclick="window.location.href='/buy-qr'" class="btn-primary" aria-label="Register a new item with QR code">
                     <i class="fas fa-plus"></i> Register Item
                 </button>
             </div>
@@ -115,10 +115,10 @@
         </section>
 
         <!-- QR Codes Section -->
-        <section id="qr-codes" class="dashboard-section">
+        <section id="qr-codes" class="dashboard-section" aria-label="Your QR codes">
             <div class="section-header">
                 <h2>My QR Codes</h2>
-                <button onclick="window.location.href='/register'" class="btn-primary">
+                <button onclick="window.location.href='/register'" class="btn-primary" aria-label="Add a new QR code">
                     <i class="fas fa-plus"></i> Add New QR Code
                 </button>
             </div>
@@ -128,10 +128,10 @@
         </section>
 
         <!-- Notifications Section -->
-        <section id="notifications" class="dashboard-section">
+        <section id="notifications" class="dashboard-section" aria-label="Your notifications">
             <div class="section-header">
                 <h2>Notifications</h2>
-                <button onclick="markAllRead()" class="btn-secondary">
+                <button onclick="markAllRead()" class="btn-secondary" aria-label="Mark all notifications as read">
                     <i class="fas fa-check-double"></i> Mark All Read
                 </button>
             </div>
@@ -141,7 +141,7 @@
         </section>
 
         <!-- Settings Section -->
-        <section id="settings" class="dashboard-section">
+        <section id="settings" class="dashboard-section" aria-label="Account settings">
             <h2>Settings</h2>
             <div class="settings-content">
                 <p>Settings panel will be implemented soon.</p>
@@ -150,22 +150,22 @@
     </div>
 
     <!-- QR Management Modal -->
-    <div id="qrManagementModal" class="modal">
+    <div id="qrManagementModal" class="modal" role="dialog" aria-labelledby="qrManagementModalTitle" aria-hidden="true">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('qrManagementModal')">&times;</span>
-            <h2>Manage QR Code</h2>
+            <span class="close" onclick="closeModal('qrManagementModal')" aria-label="Close modal">&times;</span>
+            <h2 id="qrManagementModalTitle">Manage QR Code</h2>
             <form id="qrManagementForm">
                 <div class="form-group">
                     <label for="qrText">Description</label>
-                    <textarea id="qrText" name="qrText" rows="3" placeholder="Item description"></textarea>
+                    <textarea id="qrText" name="qrText" rows="3" placeholder="Item description" aria-label="Item description"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="qrReward">Reward Amount (FCFA)</label>
-                    <input type="number" id="qrReward" name="qrReward" placeholder="5000">
+                    <input type="number" id="qrReward" name="qrReward" placeholder="5000" aria-label="Reward amount in FCFA">
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save Changes</button>
-                    <button type="button" onclick="closeModal('qrManagementModal')" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary" aria-label="Save changes to QR code">Save Changes</button>
+                    <button type="button" onclick="closeModal('qrManagementModal')" class="btn-secondary" aria-label="Cancel and close modal">Cancel</button>
                 </div>
             </form>
         </div>

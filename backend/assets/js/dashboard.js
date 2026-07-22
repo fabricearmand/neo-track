@@ -14,6 +14,11 @@ async function getQRCodes() {
             return [];
         }
 
+        if (!userData.id) {
+            console.error('❌ Invalid user data: missing user ID');
+            return [];
+        }
+
         console.log('🌐 Fetching QR codes for user:', userData.id);
         const response = await fetch(`http://localhost:3000/api/qr-codes/user/${userData.id}`, {
             headers: {
@@ -26,7 +31,7 @@ async function getQRCodes() {
         if (response.ok) {
             const qrCodes = await response.json();
             console.log('✅ QR codes fetched successfully:', qrCodes.length);
-            return qrCodes;
+            return Array.isArray(qrCodes) ? qrCodes : [];
         } else {
             console.error('❌ Failed to fetch QR codes, status:', response.status);
             const errorText = await response.text();
@@ -49,6 +54,11 @@ async function getNotifications() {
             return [];
         }
 
+        if (!userData.id) {
+            console.error('❌ Invalid user data: missing user ID');
+            return [];
+        }
+
         console.log('📬 Fetching notifications for user:', userData.id);
         const response = await fetch(`http://localhost:3000/api/notifications/user/${userData.id}`, {
             headers: {
@@ -61,7 +71,7 @@ async function getNotifications() {
         if (response.ok) {
             const notifications = await response.json();
             console.log('✅ Notifications fetched successfully:', notifications.length);
-            return notifications;
+            return Array.isArray(notifications) ? notifications : [];
         } else {
             console.error('❌ Failed to fetch notifications, status:', response.status);
             return [];
@@ -192,6 +202,11 @@ async function markAllRead() {
         const token = localStorage.getItem('token');
         const userData = JSON.parse(localStorage.getItem('userData'));
 
+        if (!token || !userData || !userData.id) {
+            console.error('❌ Missing authentication or user data');
+            return;
+        }
+
         const response = await fetch(`http://localhost:3000/api/notifications/user/${userData.id}/read-all`, {
             method: 'PUT',
             headers: {
@@ -202,16 +217,28 @@ async function markAllRead() {
         if (response.ok) {
             loadNotifications();
             updateStats();
+        } else {
+            console.error('❌ Failed to mark all as read, status:', response.status);
         }
     } catch (error) {
-        console.error('Error marking all as read:', error);
+        console.error('❌ Error marking all as read:', error);
     }
 }
 
 // Manage QR Code Modal
 async function manageQRCode(qrCodeId) {
+    if (!qrCodeId) {
+        console.error('❌ No QR code ID provided');
+        return;
+    }
+
     try {
         const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('❌ No authentication token found');
+            return;
+        }
+
         const response = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -220,20 +247,35 @@ async function manageQRCode(qrCodeId) {
 
         if (response.ok) {
             const qr = await response.json();
-            document.getElementById('qrText').value = qr.item_description || '';
-            document.getElementById('qrReward').value = qr.reward_amount;
-            sessionStorage.setItem('currentQRCode', qrCodeId);
-            document.getElementById('qrManagementModal').style.display = 'block';
+            if (qr && qr.item_description !== undefined && qr.reward_amount !== undefined) {
+                document.getElementById('qrText').value = qr.item_description || '';
+                document.getElementById('qrReward').value = qr.reward_amount;
+                sessionStorage.setItem('currentQRCode', qrCodeId);
+                document.getElementById('qrManagementModal').style.display = 'block';
+                document.getElementById('qrManagementModal').setAttribute('aria-hidden', 'false');
+            }
+        } else {
+            console.error('❌ Failed to fetch QR code, status:', response.status);
         }
     } catch (error) {
-        console.error('Error fetching QR code:', error);
+        console.error('❌ Error fetching QR code:', error);
     }
 }
 
 // Print QR Code
 async function printQRCode(qrCodeId) {
+    if (!qrCodeId) {
+        console.error('❌ No QR code ID provided');
+        return;
+    }
+
     try {
         const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('❌ No authentication token found');
+            return;
+        }
+
         const response = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -242,7 +284,17 @@ async function printQRCode(qrCodeId) {
 
         if (response.ok) {
             const qr = await response.json();
+            if (!qr || !qr.item_name) {
+                console.error('❌ Invalid QR code data');
+                return;
+            }
+
             const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                console.error('❌ Failed to open print window (popup blocked?)');
+                return;
+            }
+
             printWindow.document.write(`
                 <html>
                     <head>
@@ -269,18 +321,30 @@ async function printQRCode(qrCodeId) {
             `);
             printWindow.document.close();
             printWindow.print();
+        } else {
+            console.error('❌ Failed to fetch QR code for printing');
         }
     } catch (error) {
-        console.error('Error printing QR code:', error);
+        console.error('❌ Error printing QR code:', error);
     }
 }
 
 // Delete QR Code
 async function deleteQRCode(qrCodeId) {
+    if (!qrCodeId) {
+        console.error('❌ No QR code ID provided');
+        return;
+    }
+
     if (!confirm('Are you sure you want to delete this QR code?')) return;
 
     try {
         const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('❌ No authentication token found');
+            return;
+        }
+
         const response = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}`, {
             method: 'DELETE',
             headers: {
@@ -291,60 +355,91 @@ async function deleteQRCode(qrCodeId) {
         if (response.ok) {
             loadQRCodes();
             updateStats();
-          } else {
-            console.error('Failed to delete QR code');
+        } else {
+            console.error('❌ Failed to delete QR code, status:', response.status);
         }
     } catch (error) {
-        console.error('Error deleting QR code:', error);
+        console.error('❌ Error deleting QR code:', error);
     }
 }
 
 // Save QR Code changes
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('qrManagementForm').onsubmit = async function(e) {
-        e.preventDefault();
-        const qrCodeId = sessionStorage.getItem('currentQRCode');
-        const qrText = document.getElementById('qrText').value;
-        const qrReward = document.getElementById('qrReward').value;
-
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    item_description: qrText,
-                    reward_amount: qrReward
-                })
-            });
-
-            if (response.ok) {
-                document.getElementById('qrManagementModal').style.display = 'none';
-                loadQRCodes();
-                updateStats();
-            } else {
-                console.error('Failed to update QR code');
+    const form = document.getElementById('qrManagementForm');
+    if (form) {
+        form.onsubmit = async function(e) {
+            e.preventDefault();
+            const qrCodeId = sessionStorage.getItem('currentQRCode');
+            if (!qrCodeId) {
+                console.error('❌ No current QR code ID found');
+                return;
             }
-        } catch (error) {
-            console.error('Error updating QR code:', error);
-        }
-    };
+
+            const qrText = document.getElementById('qrText').value;
+            const qrReward = document.getElementById('qrReward').value;
+
+            if (!qrText || !qrReward) {
+                console.error('❌ Invalid form data');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('❌ No authentication token found');
+                    return;
+                }
+
+                const response = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        item_description: qrText,
+                        reward_amount: qrReward
+                    })
+                });
+
+                if (response.ok) {
+                    closeModal('qrManagementModal');
+                    loadQRCodes();
+                    updateStats();
+                } else {
+                    console.error('❌ Failed to update QR code, status:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Error updating QR code:', error);
+            }
+        };
+    }
 });
 
 // Modal close
 function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
+    try {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }
+    } catch (error) {
+        console.error('❌ Error closing modal:', error);
+    }
 }
 window.onclick = function(event) {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
+    try {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        });
+    } catch (error) {
+        console.error('❌ Error handling window click:', error);
+    }
 };
 
 // Navigation between dashboard sections
@@ -396,8 +491,18 @@ function showNotifications() {
 
 // Mark notification as read
 async function markNotificationAsRead(notificationId) {
+    if (!notificationId) {
+        console.error('❌ No notification ID provided');
+        return;
+    }
+
     try {
         const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('❌ No authentication token found');
+            return;
+        }
+
         const response = await fetch(`http://localhost:3000/api/notifications/${notificationId}/read`, {
             method: 'PUT',
             headers: {
@@ -408,18 +513,26 @@ async function markNotificationAsRead(notificationId) {
         if (response.ok) {
             loadNotifications();
             updateStats();
+        } else {
+            console.error('❌ Failed to mark notification as read, status:', response.status);
         }
     } catch (error) {
-        console.error('Error marking notification as read:', error);
+        console.error('❌ Error marking notification as read:', error);
     }
 }
 
 // Load user data into navbar
 async function loadUserData() {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    if (userData) {
-        document.getElementById('userName').textContent = userData.name;
-        document.getElementById('userEmail').textContent = userData.email;
+    try {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData && userData.name && userData.email) {
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userEmail').textContent = userData.email;
+        } else {
+            console.warn('⚠️ Incomplete user data in localStorage');
+        }
+    } catch (error) {
+        console.error('❌ Error loading user data:', error);
     }
 }
 

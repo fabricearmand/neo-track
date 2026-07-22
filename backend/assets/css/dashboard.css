@@ -1,5 +1,17 @@
 /* Dashboard Styles - NeoTrack */
 
+/* CSS Variables for Color Consistency */
+:root {
+    --primary-color: #ff6b35;
+    --primary-hover: #e55a2b;
+    --secondary-color: #6c757d;
+    --secondary-hover: #5a6268;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+}
+
 /* Dashboard Styles */
 .main-content {
     margin-left: 250px;
@@ -40,21 +52,21 @@
 }
 
 .btn-primary {
-    background: #ff6b35;
+    background: var(--primary-color);
     color: white;
 }
 
 .btn-primary:hover {
-    background: #e55a2b;
+    background: var(--primary-hover);
 }
 
 .btn-secondary {
-    background: #6c757d;
+    background: var(--secondary-color);
     color: white;
 }
 
 .btn-secondary:hover {
-    background: #5a6268;
+    background: var(--secondary-hover);
 }
 
 .stats-grid {
@@ -76,7 +88,7 @@
 
 .stat-icon {
     font-size: 2rem;
-    color: #ff6b35;
+    color: var(--primary-color);
 }
 
 .stat-info h3 {
@@ -131,7 +143,7 @@
 }
 
 .activity-icon {
-    color: #ff6b35;
+    color: var(--primary-color);
     font-size: 1.2rem;
 }
 
@@ -171,7 +183,7 @@
 }
 
 .qr-code-header {
-    background: #ff6b35;
+    background: var(--primary-color);
     color: white;
     padding: 15px;
     display: flex;
@@ -187,11 +199,11 @@
 }
 
 .qr-code-status.safe {
-    background: #28a745;
+    background: var(--success-color);
 }
 
 .qr-code-status.lost {
-    background: #ffc107;
+    background: var(--warning-color);
     color: #333;
 }
 
@@ -222,16 +234,16 @@
 }
 
 .btn-manage {
-    background: #ff6b35;
+    background: var(--primary-color);
     color: white;
 }
 
 .btn-manage:hover {
-    background: #e55a2b;
+    background: var(--primary-hover);
 }
 
 .btn-print {
-    background: #17a2b8;
+    background: var(--info-color);
     color: white;
 }
 
@@ -240,7 +252,7 @@
 }
 
 .btn-delete {
-    background: #dc3545;
+    background: var(--error-color);
     color: white;
 }
 
@@ -334,7 +346,7 @@
 .nav-item:hover, .nav-item.active {
     background: #495057;
     color: white;
-    border-left-color: #ff6b35;
+    border-left-color: var(--primary-color);
 }
 
 .nav-item i {
@@ -343,7 +355,7 @@
 }
 
 .badge {
-    background: #ff6b35;
+    background: var(--primary-color);
     color: white;
     border-radius: 10px;
     padding: 2px 8px;
@@ -370,7 +382,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #ff6b35;
+    background: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -394,7 +406,7 @@
 .logout-btn {
     width: 100%;
     padding: 8px;
-    background: #dc3545;
+    background: var(--error-color);
     color: white;
     border: none;
     border-radius: 5px;
@@ -514,5 +526,34 @@
     .header-actions {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .section-header .btn-primary,
+    .section-header .btn-secondary {
+        width: 100%;
+    }
+
+    .btn-primary, .btn-secondary {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+    .qr-code-actions {
+        flex-wrap: wrap;
+    }
+
+    .qr-code-actions button {
+        flex: 1 1 auto;
+        min-width: 80px;
     }
 }
