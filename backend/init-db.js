@@ -13,11 +13,11 @@ async function initializeDatabase() {
         });
 
         // Create database
-        await connection.execute('CREATE DATABASE IF NOT EXISTS neotrack_db');
-        await connection.execute('USE neotrack_db');
+        await connection.query('CREATE DATABASE IF NOT EXISTS neotrack_db');
+        await connection.query('USE neotrack_db');
 
         // Create users table
-        await connection.execute(`
+        await connection.query(`
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
@@ -29,7 +29,7 @@ async function initializeDatabase() {
         `);
 
         // Create qr_codes table
-        await connection.execute(`
+        await connection.query(`
             CREATE TABLE IF NOT EXISTS qr_codes (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 qr_code_id VARCHAR(255) UNIQUE NOT NULL,
@@ -46,7 +46,7 @@ async function initializeDatabase() {
         `);
 
         // Create owner_info table
-        await connection.execute(`
+        await connection.query(`
             CREATE TABLE IF NOT EXISTS owner_info (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 qr_code_id INT NOT NULL,
@@ -59,7 +59,7 @@ async function initializeDatabase() {
         `);
 
         // Create emergency_contacts table
-        await connection.execute(`
+        await connection.query(`
             CREATE TABLE IF NOT EXISTS emergency_contacts (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 qr_code_id INT NOT NULL,
@@ -72,7 +72,7 @@ async function initializeDatabase() {
         `);
 
         // Create notifications table
-        await connection.execute(`
+        await connection.query(`
             CREATE TABLE IF NOT EXISTS notifications (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -87,7 +87,7 @@ async function initializeDatabase() {
         `);
 
         // Create qr_scans table
-        await connection.execute(`
+        await connection.query(`
             CREATE TABLE IF NOT EXISTS qr_scans (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 qr_code_id INT NOT NULL,

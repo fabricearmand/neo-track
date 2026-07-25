@@ -78,6 +78,10 @@
                         <li>Help reunite someone with their lost item! 😊</li>
                     </ol>
                 </div>
+
+                <div id="scanNotification" class="scan-notification" style="display: none;">
+                    <i class="fas fa-check-circle"></i> Scan recorded. The owner has been notified.
+                </div>
             </div>
 
             <div id="errorMessage" class="error-message" style="display: none;">
@@ -168,7 +172,7 @@
 
         async function recordScan(qrCodeId) {
             try {
-                await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}/scan`, {
+                const response = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}/scan`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -178,6 +182,14 @@
                         scanner_location: 'unknown'
                     })
                 });
+
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    const notif = document.getElementById('scanNotification');
+                    if (notif) {
+                        notif.style.display = 'block';
+                    }
+                }
             } catch (error) {
                 console.error('Error recording scan:', error);
             }
@@ -346,6 +358,24 @@
         .found-message li {
             margin: 8px 0;
             color: #666;
+        }
+
+        .scan-notification {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .scan-notification i {
+            color: #28a745;
         }
 
         .error-message {

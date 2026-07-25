@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const pool = require('./config/database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,6 +52,71 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
+// Routes
+app.post('/api/qr-codes/:qrCodeId/scan', async (req, res) => {
+    try {
+        const { qrCodeId } = req.params;
+        const { scanner_ip, scanner_location } = req.body || {};
+
+        const [qrRows] = await pool.execute(
+            'SELECT id, user_id, item_name FROM qr_codes WHERE qr_code_id = ?',
+            [qrCodeId]
+        );
+
+        const qr = qrRows[0];
+        if (!qr) {
+            return res.status(404).json({ error: 'QR code not found' });
+        }
+
+        await pool.execute(
+            'INSERT INTO qr_scans (qr_code_id, scanner_ip, scanner_location) VALUES (?, ?, ?)',
+            [qr.id, scanner_ip || 'unknown', scanner_location || 'unknown']
+        );
+
+        await pool.execute(
+            'INSERT INTO notifications (user_id, qr_code_id, title, message) VALUES (?, ?, ?, ?)',
+            [qr.user_id, qr.id, 'QR Code Scanned', `Your QR code "${qr.item_name}" was just scanned.`]
+        );
+
+        res.json({ success: true, message: 'Scan recorded' });
+    } catch (error) {
+        console.error('Record scan error:', error);
+        res.status(500).json({ error: 'Failed to record scan' });
+    }
+});
+
+app.get('/api/qr-images/:qrCodeId', async (req, res) => {
+    try {
+        const { qrCodeId } = req.params;
+        const [qrRows] = await pool.execute(
+            'SELECT qc.qr_code_id, qc.item_name, oi.owner_name, oi.owner_email, oi.owner_phone FROM qr_codes qc LEFT JOIN owner_info oi ON qc.id = oi.qr_code_id WHERE qc.qr_code_id = ?',
+            [qrCodeId]
+        );
+
+        const qr = qrRows[0];
+        if (!qr) {
+            return res.status(404).json({ error: 'QR code not found' });
+        }
+
+        const QRCode = require('qrcode');
+        const publicUrl = `http://localhost:3000/public-item.html?id=${qr.qr_code_id}`;
+        const qrData = JSON.stringify({
+            qr_code_id: qr.qr_code_id,
+            item_name: qr.item_name,
+            owner_name: qr.owner_name,
+            owner_email: qr.owner_email,
+            owner_phone: qr.owner_phone,
+            public_url: publicUrl
+        });
+
+        const qrCodeDataURL = await QRCode.toDataURL(qrData);
+        res.json({ qr_code_data_url: qrCodeDataURL });
+    } catch (error) {
+        console.error('Generate QR image error:', error);
+        res.status(500).json({ error: 'Failed to generate QR code image' });
+    }
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

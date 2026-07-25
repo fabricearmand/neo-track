@@ -137,7 +137,7 @@ async function loadQRCodes() {
     const qrCodes = await getQRCodes();
 
     if (qrCodes.length === 0) {
-        qrCodesGrid.innerHTML = '<p>No QR codes yet. <a href="/register">Buy one now!</a></p>';
+            qrCodesGrid.innerHTML = '<p>No QR codes yet. <a href="/buy-qr">Buy one now!</a></p>';
         return;
     }
 
@@ -276,14 +276,22 @@ async function printQRCode(qrCodeId) {
             return;
         }
 
-        const response = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}`, {
+        const imageResponse = await fetch(`http://localhost:3000/api/qr-images/${qrCodeId}`);
+        if (!imageResponse.ok) {
+            console.error('❌ Failed to fetch QR code image');
+            return;
+        }
+
+        const imageData = await imageResponse.json();
+
+        const qrResponse = await fetch(`http://localhost:3000/api/qr-codes/${qrCodeId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
 
-        if (response.ok) {
-            const qr = await response.json();
+        if (qrResponse.ok) {
+            const qr = await qrResponse.json();
             if (!qr || !qr.item_name) {
                 console.error('❌ Invalid QR code data');
                 return;
@@ -302,14 +310,14 @@ async function printQRCode(qrCodeId) {
                         <style>
                             body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
                             .qr-container { margin: 20px; }
-                            .qr-code { width: 200px; height: 200px; background: #f0f0f0; margin: 20px auto; }
+                            .qr-code img { width: 200px; height: 200px; margin: 20px auto; display: block; }
                             .item-info { margin: 20px; }
                         </style>
                     </head>
                     <body>
                         <h1>NeoTrack QR Code</h1>
                         <div class="qr-container">
-                            <div class="qr-code"></div>
+                            <div class="qr-code"><img src="${imageData.qr_code_data_url}" alt="QR Code"/></div>
                             <div class="item-info">
                                 <h3>${qr.item_name}</h3>
                                 <p>QR Code: ${qr.qr_code_id}</p>
@@ -319,8 +327,6 @@ async function printQRCode(qrCodeId) {
                     </body>
                 </html>
             `);
-            printWindow.document.close();
-            printWindow.print();
         } else {
             console.error('❌ Failed to fetch QR code for printing');
         }

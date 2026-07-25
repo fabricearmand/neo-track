@@ -65,10 +65,15 @@ router.post('/', async (req, res) => {
         // Insert QR code
         const [qrResult] = await pool.execute(
             'INSERT INTO qr_codes (qr_code_id, user_id, item_name, item_description, reward_amount, qr_type) VALUES (?, ?, ?, ?, ?, ?)',
-            [qr_code_id, user_id, item_name, item_description || null, reward_amount, qr_type || 'basic']
+            [qr_code_id, user_id, item_name, item_description || null, reward_amount || 0, qr_type || 'basic']
         );
 
         const qrCodeId = qrResult.insertId;
+
+        await pool.execute(
+            'INSERT INTO notifications (user_id, qr_code_id, title, message) VALUES (?, ?, ?, ?)',
+            [user_id, qrCodeId, 'QR Code Created', `Your QR code for "${item_name}" has been created successfully.`]
+        );
 
         // Insert owner info
         await pool.execute(
